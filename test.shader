@@ -4,6 +4,8 @@ Shader "Unlit/test"                    //目标、名称
     //Shader 界面变量
     Properties
     {
+        _Color("颜色", Color) = (1,0,0,1)
+
         _MainTex ("Texture", 2D) = "white" {} 
     }
 
@@ -51,6 +53,8 @@ Shader "Unlit/test"                    //目标、名称
                 float4 vertex : SV_POSITION;  //输出修改后的顶点
             };
 
+            fixed4 _Color;
+
             // 获取变量
             sampler2D _MainTex;   //颜色贴图
             float4 _MainTex_ST;   // 贴图重复与偏移
@@ -70,6 +74,8 @@ Shader "Unlit/test"                    //目标、名称
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);    //设置输出颜色 = 获取贴图，依据修改后的UV坐标
+                
+                col *= _Color;
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);    // 给颜色添加雾
                 return col;                          // 输出颜色
